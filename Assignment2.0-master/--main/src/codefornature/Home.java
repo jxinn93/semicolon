@@ -289,7 +289,7 @@ public class Home extends javax.swing.JFrame {
 
     private void soundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_soundActionPerformed
       sound.setContentAreaFilled(false);
-      sound.setBorderPainted(false);
+      
        try {
         String audioFilePath = "C:\\Users\\SCSM11\\Downloads\\Flower Garden - Super Mario World 2_ Yoshi's Island Music Extended.mp3";
         togglePlayback(audioFilePath);

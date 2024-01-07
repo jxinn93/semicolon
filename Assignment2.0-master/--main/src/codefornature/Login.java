@@ -14,6 +14,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 import codefornature.PasswordHashing;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 
 /**
@@ -39,45 +40,71 @@ public class Login extends javax.swing.JFrame {
     
     }
     
+private void loginUser() {
+    String email = fEmail.getText().trim();
+    String password = fPassword.getText();
+    if (email.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "All fields are required. Please fill in all the details.");
+        return;
+    }
+    Connection con = null; // Declare Connection outside the try-catch to close it in the finally block
 
-    private void loginUser() {
-        String email = fEmail.getText().trim();
-        String password = fPassword.getText();
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con = DriverManager.getConnection(userClass.SUrl, userClass.SUser, userClass.SPass);
+        Statement st = con.createStatement();
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(userClass.SUrl, userClass.SUser, userClass.SPass);
-            Statement st = con.createStatement();
+        String query = "SELECT * FROM user WHERE email = '" + email + "'";
+        ResultSet rs = st.executeQuery(query);
 
-            String query = "SELECT * FROM user WHERE email = '" + email + "' AND password = '" + password + "'";
-            ResultSet rs = st.executeQuery(query);
-
-            if (rs.next()) {
-                // Login successful
+        if (rs.next()) {
+            // User found
+            String hashedPassword = rs.getString("hashedPassword");
+            if (PasswordHashing.PasswordCheck(password, hashedPassword)) {
+                // Passwords match - Login successful
                 String username = rs.getString("username");
-                
                 int points = rs.getInt("points");
                 String regDate = rs.getString("regDate");
                 String securityQuestion = rs.getString("securityQuestion");
                 String securityAnswer = rs.getString("securityAnswer");
-                userClass loggedInUser = new userClass(email, username, password, regDate, points, securityQuestion, securityAnswer);
+                SchedulerService.scheduleNotification(username, email);
+                userClass loggedInUser = new userClass(email, username, hashedPassword, regDate, points, securityQuestion, securityAnswer);
+
                 this.loggedInUser = loggedInUser;
 
                 JOptionPane.showMessageDialog(null, "Login successful");
-            Home HomeFrame = new Home(username, points, email, regDate);
-            HomeFrame.setVisible(true);
-            HomeFrame.pack();
-            HomeFrame.setLocationRelativeTo(null);
-            } else {
-                // Login failed
-                JOptionPane.showMessageDialog(null, "Login failed. Please check your email and password.");
-            }
 
-            con.close();
-        } catch (Exception ex) {
-            System.out.println("Error! " + ex.getMessage());
+                Home HomeFrame = new Home(username, points, email, regDate);
+                HomeFrame.setVisible(true);
+                HomeFrame.pack();
+                HomeFrame.setLocationRelativeTo(null);
+            } else {
+                // Passwords do not match - Login failed
+                JOptionPane.showMessageDialog(null, "Login failed. Please check your email and password.");
+                fEmail.setText("");
+                fPassword.setText("");
+            }
+        } else {
+            // User not found - Login failed
+            JOptionPane.showMessageDialog(null, "Login failed. Please check your email and password.");
+            fEmail.setText("");
+            fPassword.setText("");
+        }
+    } catch (SQLException e) {
+        System.out.println("SQL Error: " + e.getMessage());
+    } catch (ClassNotFoundException e) {
+        System.out.println("Class Not Found Error: " + e.getMessage());
+    } finally {
+        try {
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while closing connection: " + e.getMessage());
         }
     }
+}
+
 
 
 

@@ -55,6 +55,7 @@ public class History extends javax.swing.JFrame {
                     allQs.add(rs.getInt("day"));
                 }
                 for(int i=1;i<=10;i++){
+                    if(i<=day){
                     if(!allQs.contains(i)){
                         RepeatableQs.add(i);
                     }
@@ -69,6 +70,7 @@ public class History extends javax.swing.JFrame {
                               
                             }
                         }
+                    }
                     }
                 }
                 StringBuilder sb=new StringBuilder();
@@ -122,7 +124,7 @@ public class History extends javax.swing.JFrame {
                     TriviaFrameReference.passQ(question);
                     this.dispose();
                     }
-                if(attempt==0||correct==false||(attempt==1&&correct==false)){
+                if(attempt==0&& correct==false||(attempt==1&&correct==false)){
                     TriviaFrameReference.page(question);
                     this.dispose();
                 }    

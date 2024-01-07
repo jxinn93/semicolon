@@ -41,7 +41,19 @@ public class Register extends javax.swing.JFrame {
         String securityQuestion = fQuestion.getText().trim();
         String securityAnswer = fAnswer.getText().trim();
         int points = 0;
-
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || securityQuestion.isEmpty() || securityAnswer.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "All fields are required. Please fill in all the details.");
+        return; }
+        
+        if (!isValidEmail(email)) {
+        JOptionPane.showMessageDialog(this, "Invalid email format. Please enter a valid email address.");
+        fUsername.setText("");
+        fEmail.setText("");
+        fPassword.setText("");
+        fQuestion.setText("");
+        fAnswer.setText("");
+        return;
+    }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(userClass.SUrl, userClass.SUser, userClass.SPass);
@@ -57,6 +69,8 @@ public class Register extends javax.swing.JFrame {
             fUsername.setText("");
             fEmail.setText("");
             fPassword.setText("");
+            fQuestion.setText("");
+            fAnswer.setText("");
             con.close();
             return;
             }
@@ -69,6 +83,8 @@ public class Register extends javax.swing.JFrame {
             fUsername.setText("");
             fEmail.setText("");
             fPassword.setText("");
+            fQuestion.setText("");
+            fAnswer.setText("");
             con.close();
             return;
             }
@@ -103,6 +119,10 @@ public class Register extends javax.swing.JFrame {
             System.out.println("Error! " + e.getMessage());
         }
     } 
+    private boolean isValidEmail(String email) {
+    return email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
+
+}
 
 
 

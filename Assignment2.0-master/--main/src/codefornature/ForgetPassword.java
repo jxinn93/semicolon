@@ -65,10 +65,12 @@ public class ForgetPassword extends javax.swing.JFrame {
                     // Use equalsIgnoreCase for case-insensitive comparison
                     if (answer.equalsIgnoreCase(correctAnswer)) {
                         // Update the password
-                        String updateQuery = "UPDATE user SET password = ? WHERE email = ?";
+                        String hashedNewPassword = PasswordHashing.hashPassword(newPassword);
+                        String updateQuery = "UPDATE user SET password = ? , hashedPassword = ? WHERE email = ?";
                         try (PreparedStatement updatePs = con.prepareStatement(updateQuery)) {
                             updatePs.setString(1, new String(newPassword));
-                            updatePs.setString(2, email);
+                            updatePs.setString(2, hashedNewPassword);
+                            updatePs.setString(3, email);
                             updatePs.executeUpdate();
                             JOptionPane.showMessageDialog(this, "Password reset successful.");
                         }
@@ -262,9 +264,9 @@ public class ForgetPassword extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Login, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Login, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(60, Short.MAX_VALUE))
         );
 
