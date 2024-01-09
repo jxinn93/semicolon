@@ -31,6 +31,7 @@ public class History extends javax.swing.JFrame {
         this.username=username;
         this.day=day;
         initComponents();
+        displayNoAttemptQuestion();
         setupBtn();
         
     }
