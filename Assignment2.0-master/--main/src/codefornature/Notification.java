@@ -38,7 +38,7 @@ public class Notification {
 
     public long getDelay() {
         // Calculate delay until the next scheduled time
-        LocalDateTime scheduledTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(12,00)); // 12.00 PM
+        LocalDateTime scheduledTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(15,25)); // 12.00 PM
         LocalDateTime now = LocalDateTime.now();
 
         if (now.isAfter(scheduledTime)) {
