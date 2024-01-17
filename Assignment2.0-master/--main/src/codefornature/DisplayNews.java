@@ -115,6 +115,14 @@ public class DisplayNews extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setMinWidth(200);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(0).setMaxWidth(200);
+            jTable1.getColumnModel().getColumn(0).setHeaderValue("Title");
+            jTable1.getColumnModel().getColumn(1).setHeaderValue("URL");
+            jTable1.getColumnModel().getColumn(2).setHeaderValue("DATE");
+        }
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 200, 550, 330));
 
@@ -127,17 +135,17 @@ public class DisplayNews extends javax.swing.JFrame {
 
     private void RealNewsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealNewsActionPerformed
          try {
-        Api api = new Api();  // Create an instance of the Api class
-        List<NewsFilter.NewsArticle> apiNewsList = api.getNewsNature();  // Call the getNewsNature method
+        Api api = new Api();  
+        List<NewsFilter.NewsArticle> apiNewsList = api.getNewsNature();  
 
-        // Now, you can pass apiNewsList to the Real frame
+       
         Real jframe = new Real(apiNewsList);
         jframe.setVisible(true);
         jframe.pack();
         jframe.setLocationRelativeTo(null);
     } catch (IOException e) {
         e.printStackTrace();
-        // Handle the IOException as needed
+   
     }
     }//GEN-LAST:event_RealNewsActionPerformed
 
@@ -151,7 +159,7 @@ public class DisplayNews extends javax.swing.JFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int row = jTable1.rowAtPoint(evt.getPoint());
         int col = jTable1.columnAtPoint(evt.getPoint());
-        if (col == 1) { // Check if the clicked column is the URL column
+        if (col == 1) { 
             String url = (String) jTable1.getValueAt(row, col);
             openUrlInBrowser(url);
         }
@@ -170,7 +178,7 @@ public class DisplayNews extends javax.swing.JFrame {
     }
  private void populateTable() {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0); // Clear existing rows in the table
+    model.setRowCount(0); 
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
 

@@ -19,6 +19,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 
+
+
+
+
+
 public class Api {
     private final String NEWS_API_URL = "https://newsapi.org/v2/everything";
     private final String API_KEY = "4f88a5505a9b496c9937a27aad3138df";
@@ -108,8 +113,8 @@ private Date parseDate(String dateString) {
         return null;
     }
 }
-}
 
+}
     class ApiResponse {
     private int responseCode;
     private String response;

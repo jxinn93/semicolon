@@ -134,7 +134,7 @@ public class PlantTree extends javax.swing.JFrame {
                     points=rs.getInt("points");
                 }
             if(name.equals("")){
-                JOptionPane.showMessageDialog(new JFrame(),"Please enter amount.","Error",JOptionPane.ERROR_MESSAGE); 
+                JOptionPane.showMessageDialog(new JFrame(),"Please enter name to be written on the planted tree.","Error",JOptionPane.ERROR_MESSAGE); 
             }
             else{
                 if(points>=1000){

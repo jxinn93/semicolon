@@ -7,7 +7,11 @@ import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.io.IOException;
-
+import java.awt.Desktop;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.net.URI;
+import java.net.URISyntaxException;
 public class Real extends javax.swing.JFrame {
     private List<NewsFilter.NewsArticle> apiNewsList;
     /**
@@ -23,19 +27,41 @@ public class Real extends javax.swing.JFrame {
         StringBuilder apiNewsText = new StringBuilder();
         
         if(apiNewsList != null && !apiNewsList.isEmpty()){
+            apiNewsText.append("<html>");
         for(NewsFilter.NewsArticle news : apiNewsList){
-            apiNewsText.append(news.title).append("\n").append(news.url).append("\n")
-                    .append(new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH).format(news.date)).append("\n\n");
-            
-        }  setNewsText(apiNewsText.toString());
+             apiNewsText.append("<b>").append(news.title).append("</b><br>")
+                    .append("<a href=\"").append(news.url).append("\">").append(news.url).append("</a><br>")
+                    .append(new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH).format(news.date)).append("<br><br>");
+        }
+        apiNewsText.append("</html>");
+        setNewsText(apiNewsText.toString());
         }else {
            System.out.println("API NewsList is null or empty. Cannot display news");
                 }
     }
         
    public void setNewsText(String newsText){
+      DisplayNews.setContentType("text/html");
+      DisplayNews.setEditable(false);
       DisplayNews.setText(newsText);
+      DisplayNews.addHyperlinkListener(new HyperlinkListener(){
+        @Override
+            public void hyperlinkUpdate(HyperlinkEvent e) {
+                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                    openUrlInBrowser(e.getURL().toString());
+                }
+            }
+        });
+   
+     
    }
+   private void openUrlInBrowser(String url) {
+        try {
+            Desktop.getDesktop().browse(new URI(url));
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -52,14 +78,19 @@ public class Real extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Real News");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, 410, 110));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 140, 410, 110));
 
         DisplayNews.setEditable(false);
         DisplayNews.setBackground(new java.awt.Color(255, 255, 204));
-        DisplayNews.setFont(new java.awt.Font("Segoe UI Historic", 3, 18)); // NOI18N
+        DisplayNews.setFont(new java.awt.Font("Segoe UI Historic", 3, 36)); // NOI18N
+        DisplayNews.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
+            public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
+                DisplayNewsHyperlinkUpdate(evt);
+            }
+        });
         jScrollPane2.setViewportView(DisplayNews);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 560, 420));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, 560, 420));
 
         jButton1.setBackground(new java.awt.Color(255, 255, 255));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
@@ -82,6 +113,10 @@ public class Real extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void DisplayNewsHyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_DisplayNewsHyperlinkUpdate
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DisplayNewsHyperlinkUpdate
 
     /**
      * @param args the command line arguments
